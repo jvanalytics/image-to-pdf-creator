@@ -8,9 +8,10 @@ interface ImageCardProps {
   file: File;
   preview: string;
   onRemove: (id: string) => void;
+  onPreview: (id: string) => void;
 }
 
-export const ImageCard = ({ id, file, preview, onRemove }: ImageCardProps) => {
+export const ImageCard = ({ id, file, preview, onRemove, onPreview }: ImageCardProps) => {
   const {
     attributes,
     listeners,
@@ -56,11 +57,14 @@ export const ImageCard = ({ id, file, preview, onRemove }: ImageCardProps) => {
       </button>
 
       {/* Image Preview */}
-      <div className="aspect-[4/3] overflow-hidden">
+      <div 
+        className="aspect-[4/3] overflow-hidden cursor-pointer"
+        onClick={() => onPreview(id)}
+      >
         <img
           src={preview}
           alt={file.name}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105"
           loading="lazy"
         />
       </div>
