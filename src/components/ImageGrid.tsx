@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   DndContext,
   closestCenter,
@@ -15,6 +16,7 @@ import {
 } from "@dnd-kit/sortable";
 import { AnimatePresence, motion } from "framer-motion";
 import { ImageCard } from "./ImageCard";
+import { PreviewModal } from "./PreviewModal";
 
 export interface ImageFile {
   id: string;
@@ -29,6 +31,8 @@ interface ImageGridProps {
 }
 
 export const ImageGrid = ({ images, onReorder, onRemove }: ImageGridProps) => {
+  const [previewImage, setPreviewImage] = useState<ImageFile | null>(null);
+
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -47,6 +51,13 @@ export const ImageGrid = ({ images, onReorder, onRemove }: ImageGridProps) => {
       const oldIndex = images.findIndex((img) => img.id === active.id);
       const newIndex = images.findIndex((img) => img.id === over.id);
       onReorder(arrayMove(images, oldIndex, newIndex));
+    }
+  };
+
+  const handlePreview = (id: string) => {
+    const image = images.find((img) => img.id === id);
+    if (image) {
+      setPreviewImage(image);
     }
   };
 
@@ -78,12 +89,19 @@ export const ImageGrid = ({ images, onReorder, onRemove }: ImageGridProps) => {
                   file={image.file}
                   preview={image.preview}
                   onRemove={onRemove}
+                  onPreview={handlePreview}
                 />
               ))}
             </AnimatePresence>
           </div>
         </SortableContext>
       </DndContext>
+
+      <PreviewModal
+        isOpen={!!previewImage}
+        onClose={() => setPreviewImage(null)}
+        image={previewImage}
+      />
     </motion.div>
   );
 };
