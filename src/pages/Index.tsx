@@ -3,13 +3,15 @@ import { toast } from "sonner";
 import { Header } from "@/components/Header";
 import { UploadZone } from "@/components/UploadZone";
 import { ImageGrid } from "@/components/ImageGrid";
-import { ActionBar } from "@/components/ActionBar";
+import { ActionBar, PageOrientation, FillMode } from "@/components/ActionBar";
 import { useImageUpload } from "@/hooks/useImageUpload";
 import { generatePDF } from "@/lib/pdfGenerator";
 
 const Index = () => {
   const [fileName, setFileName] = useState("combined-document");
   const [isGenerating, setIsGenerating] = useState(false);
+  const [orientation, setOrientation] = useState<PageOrientation>("portrait");
+  const [fillMode, setFillMode] = useState<FillMode>("fit");
 
   const {
     images,
@@ -32,7 +34,7 @@ const Index = () => {
     setIsGenerating(true);
 
     try {
-      await generatePDF(images, fileName);
+      await generatePDF(images, fileName, orientation, fillMode);
       toast.success("PDF gerado com sucesso!", {
         description: "O download começou automaticamente.",
       });
@@ -73,6 +75,10 @@ const Index = () => {
             onGeneratePDF={handleGeneratePDF}
             onClearAll={clearAll}
             isGenerating={isGenerating}
+            orientation={orientation}
+            onOrientationChange={setOrientation}
+            fillMode={fillMode}
+            onFillModeChange={setFillMode}
           />
         </main>
 
