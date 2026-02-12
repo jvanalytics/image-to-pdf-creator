@@ -1,23 +1,28 @@
 import { jsPDF } from "jspdf";
 import { ImageFile } from "@/components/ImageGrid";
 
+export type PageOrientation = "portrait" | "landscape";
+export type FillMode = "fit" | "fill";
+
 export const generatePDF = async (
   images: ImageFile[],
-  fileName: string
+  fileName: string,
+  orientation: PageOrientation = "portrait",
+  fillMode: FillMode = "fit"
 ): Promise<void> => {
   if (images.length === 0) {
     throw new Error("Nenhuma imagem para processar");
   }
 
   const pdf = new jsPDF({
-    orientation: "portrait",
+    orientation,
     unit: "mm",
     format: "a4",
   });
 
   const pageWidth = pdf.internal.pageSize.getWidth();
   const pageHeight = pdf.internal.pageSize.getHeight();
-  const margin = 10;
+  const margin = fillMode === "fill" ? 0 : 10;
   const maxWidth = pageWidth - margin * 2;
   const maxHeight = pageHeight - margin * 2;
 
@@ -27,25 +32,37 @@ export const generatePDF = async (
     }
 
     const image = images[i];
-    
-    // Get image dimensions
     const imgDimensions = await getImageDimensions(image.preview);
-    
-    // Calculate aspect ratio and fit to page
     const aspectRatio = imgDimensions.width / imgDimensions.height;
-    
-    let finalWidth = maxWidth;
-    let finalHeight = maxWidth / aspectRatio;
-    
-    if (finalHeight > maxHeight) {
-      finalHeight = maxHeight;
-      finalWidth = maxHeight * aspectRatio;
+
+    let finalWidth: number;
+    let finalHeight: number;
+
+    if (fillMode === "fill") {
+      // Fill: cover entire page, may crop
+      const pageAspect = maxWidth / maxHeight;
+      if (aspectRatio > pageAspect) {
+        // Image is wider — fit height, overflow width
+        finalHeight = maxHeight;
+        finalWidth = maxHeight * aspectRatio;
+      } else {
+        // Image is taller — fit width, overflow height
+        finalWidth = maxWidth;
+        finalHeight = maxWidth / aspectRatio;
+      }
+    } else {
+      // Fit: contain within page, preserve ratio
+      finalWidth = maxWidth;
+      finalHeight = maxWidth / aspectRatio;
+      if (finalHeight > maxHeight) {
+        finalHeight = maxHeight;
+        finalWidth = maxHeight * aspectRatio;
+      }
     }
-    
-    // Center the image on the page
+
     const xOffset = (pageWidth - finalWidth) / 2;
     const yOffset = (pageHeight - finalHeight) / 2;
-    
+
     pdf.addImage(
       image.preview,
       "JPEG",
@@ -58,7 +75,6 @@ export const generatePDF = async (
     );
   }
 
-  // Sanitize filename
   const sanitizedFileName = fileName.trim() || "combined-document";
   const finalFileName = sanitizedFileName.endsWith(".pdf")
     ? sanitizedFileName

@@ -1,7 +1,17 @@
 import { FileDown, Trash2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { motion } from "framer-motion";
+
+export type PageOrientation = "portrait" | "landscape";
+export type FillMode = "fit" | "fill";
 
 interface ActionBarProps {
   imageCount: number;
@@ -10,6 +20,10 @@ interface ActionBarProps {
   onGeneratePDF: () => void;
   onClearAll: () => void;
   isGenerating: boolean;
+  orientation: PageOrientation;
+  onOrientationChange: (orientation: PageOrientation) => void;
+  fillMode: FillMode;
+  onFillModeChange: (mode: FillMode) => void;
 }
 
 export const ActionBar = ({
@@ -19,6 +33,10 @@ export const ActionBar = ({
   onGeneratePDF,
   onClearAll,
   isGenerating,
+  orientation,
+  onOrientationChange,
+  fillMode,
+  onFillModeChange,
 }: ActionBarProps) => {
   if (imageCount === 0) {
     return null;
@@ -57,6 +75,38 @@ export const ActionBar = ({
           <Trash2 className="w-4 h-4 mr-2" />
           Limpar tudo
         </Button>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label className="text-sm font-medium text-foreground mb-1.5 block">
+            Orientação da página
+          </label>
+          <Select value={orientation} onValueChange={(v) => onOrientationChange(v as PageOrientation)}>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="portrait">A4 Vertical</SelectItem>
+              <SelectItem value="landscape">A4 Horizontal</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div>
+          <label className="text-sm font-medium text-foreground mb-1.5 block">
+            Preenchimento da imagem
+          </label>
+          <Select value={fillMode} onValueChange={(v) => onFillModeChange(v as FillMode)}>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="fit">Parcial (manter proporção)</SelectItem>
+              <SelectItem value="fill">Total (preencher página)</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4">
