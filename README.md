@@ -64,6 +64,32 @@ This project is built with:
 
 Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
 
+## Deploy with Docker (Railway)
+
+This repository includes a production-ready `Dockerfile` and `.dockerignore` for container deployment.
+
+### 1) Build and test locally (optional)
+
+```sh
+# Build the Docker image
+docker build -t image-to-pdf-creator .
+
+# Run the container locally
+docker run --rm -p 3000:3000 image-to-pdf-creator
+```
+
+Then open `http://localhost:3000`.
+
+### 2) Deploy on Railway
+
+1. Push your latest code (including `Dockerfile` and `.dockerignore`) to GitHub.
+2. In Railway, click **New Project** -> **Deploy from GitHub repo**.
+3. Select this repository.
+4. Railway will detect and use the `Dockerfile` automatically.
+5. Deploy. Railway sets the `PORT` environment variable automatically.
+
+The container is configured to serve the Vite build from `dist` and listen on Railway's assigned port.
+
 ## Can I connect a custom domain to my Lovable project?
 
 Yes, you can!
