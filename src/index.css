@@ -17,7 +17,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 220 25% 10%;
 
-    --primary: 217 91% 60%;
+    --primary: 270 91% 60%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 220 14% 96%;
@@ -26,7 +26,7 @@
     --muted: 220 14% 96%;
     --muted-foreground: 220 10% 46%;
 
-    --accent: 217 91% 60%;
+    --accent: 270 91% 60%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
@@ -34,18 +34,18 @@
 
     --border: 220 13% 91%;
     --input: 220 13% 91%;
-    --ring: 217 91% 60%;
+    --ring: 270 91% 60%;
 
     --radius: 0.75rem;
 
     /* Custom tokens */
-    --upload-border: 217 91% 60%;
-    --upload-bg: 217 91% 97%;
-    --upload-bg-hover: 217 91% 95%;
+    --upload-border: 270 91% 60%;
+    --upload-bg: 270 91% 97%;
+    --upload-bg-hover: 270 91% 95%;
     --shadow-soft: 0 4px 20px -4px hsl(220 25% 10% / 0.08);
     --shadow-medium: 0 8px 30px -6px hsl(220 25% 10% / 0.12);
-    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(231 91% 65%));
-    
+    --gradient-primary: linear-gradient(135deg, hsl(270 91% 60%), hsl(285 91% 65%));
+
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
@@ -53,7 +53,7 @@
     --sidebar-accent: 240 4.8% 95.9%;
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217 91% 60%;
+    --sidebar-ring: 270 91% 60%;
   }
 
   .dark {
